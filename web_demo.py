@@ -1,9 +1,15 @@
+import os
+os.environ['TRANSFORMERS_CACHE']='/home/guoqiang007/software/hug-models'
+os.environ['HF_HOME'] = '/home/guoqiang007/software/hug-models'
 from transformers import AutoModel, AutoTokenizer
 import gradio as gr
 import mdtex2html
 
-tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
-model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).half().cuda()
+
+model_pth = "/home/guoqiang007/software/hug-models-nocache/chatglm-6b"
+
+tokenizer = AutoTokenizer.from_pretrained(model_pth, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_pth, trust_remote_code=True).half().cuda()
 model = model.eval()
 
 """Override Chatbot.postprocess"""
@@ -98,4 +104,4 @@ with gr.Blocks() as demo:
 
     emptyBtn.click(reset_state, outputs=[chatbot, history], show_progress=True)
 
-demo.queue().launch(share=False, inbrowser=True)
+demo.queue().launch(server_name='0.0.0.0',server_port=7654,share=False, inbrowser=True)

@@ -35,6 +35,11 @@ async def create_item(request: Request):
                                    max_length=max_length if max_length else 2048,
                                    top_p=top_p if top_p else 0.7,
                                    temperature=temperature if temperature else 0.95)
+    response = response.strip("broker: ")
+    print('history type:',type(history[-1]))
+    tmp = history[-1][-1]
+    tmp = tmp.strip("broker: ")
+    history[-1] = (history[-1][0],tmp)
     now = datetime.datetime.now()
     time = now.strftime("%Y-%m-%d %H:%M:%S")
     answer = {
@@ -50,7 +55,9 @@ async def create_item(request: Request):
 
 
 if __name__ == '__main__':
-    tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
-    model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).half().cuda()
+    model_pth = "THUDM/chatglm-6b"
+    model_pth = "/home/guoqiang007/software/hug-models-nocache/chatglm-6b"
+    tokenizer = AutoTokenizer.from_pretrained(model_pth, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_pth, trust_remote_code=True).half().cuda()
     model.eval()
-    uvicorn.run(app, host='0.0.0.0', port=8000, workers=1)
+    uvicorn.run(app, host='0.0.0.0', port=8100, workers=1)

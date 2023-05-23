@@ -132,3 +132,6 @@ dmypy.json
 # Mac system file
 model/
 .idea
+
+#checkpoint-ptuning-v3 
+checkpoint-ptuning-v3
