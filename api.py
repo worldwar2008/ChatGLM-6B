@@ -61,3 +61,7 @@ if __name__ == '__main__':
     model = AutoModel.from_pretrained(model_pth, trust_remote_code=True).half().cuda()
     model.eval()
     uvicorn.run(app, host='0.0.0.0', port=8100, workers=1)
+
+
+
+    
